@@ -14,8 +14,10 @@ public void mousePressed() {
 
 public void reader() {
   Table table;
-  table = loadTable("Chemicals.tsv", "header");
+  table = loadTable("Chemicals.tsv", "tsv");
   for (int i = 0; i < table.getRowCount(); i++) {
-    println(table.getString("name"));
+    String formula = table.getString(i, 0);
+    String name = table.getString(i, 1);
+    println(formula);
   }
 }
