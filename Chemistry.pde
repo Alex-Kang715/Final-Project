@@ -1,24 +1,44 @@
 //Superscript
 //Subscript
 BufferedReader reader;
-Button b = new Button(100, 100, 200, 200, 128);
+DragAndDrop b = new DragAndDrop(100, 100, 200, 200, "Na");
+ArrayList<DragAndDrop> Buttons = new ArrayList<DragAndDrop>();
+ArrayList<Specie> Species = new ArrayList<Specie>();
 public void setup() {
   size(600, 400);
-  reader();
   getElements();
+  reader();
+  createFont("arial-unicode-ms.ttf", 16);
 }
 public void draw() {
+  background(255);
   b.show();
+  b.drag();
+  for (int i = 0; i < Buttons.size(); i++) {
+    Buttons.get(i).show();
+  }
+  //System.out.println(b.click());
 }
 
 public void mousePressed() {
+  b.setOffset();
+  for (int i = 0; i < Buttons.size(); i++) {
+    Buttons.get(i).setOffset();
+  }
+}
+public void mouseDragged() {
   b.click();
+  b.drag();
+  for (int i = 0; i < Buttons.size(); i++) {
+    Buttons.get(i).click();
+    Buttons.get(i).drag();
+  }
 }
 
 public void reader() {
   Table species;
-  ArrayList<Specie> Species = new ArrayList<Specie>();
   species = loadTable("Chemicals.tsv", "tsv");
+
   for (int i = 0; i < species.getRowCount(); i++) {
     String formula = species.getString(i, 0);
     String name = species.getString(i, 1);
@@ -26,11 +46,12 @@ public void reader() {
     String state = species.getString(i, 3);
     double h = species.getDouble(i, 4);
     double s = species.getDouble(i, 5);
-    double g = species.getInt(i, 6);
+    double g = species.getDouble(i, 6);
+    PFont font = createFont("Arial Unicode MS", 24);
+    textFont(font);
     Species.add(new Specie(formula, name, name2, state, h, s, g));
-    System.out.println(species.getDouble(i,6));
+    Buttons.add(new DragAndDrop((int)random(100, 200), (int)random(100, 200), (int)random(300, 400), (int)random(300, 400), Species.get(i).names[0]));
   }
-  
 }
 
 public ArrayList getElements() {
