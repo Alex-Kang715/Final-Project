@@ -1,5 +1,4 @@
 public class DragAndDrop extends Button {
-  private boolean incrementable = true;
   private int sizeX1, sizeX2, sizeY1, sizeY2;
   public DragAndDrop(int x1, int y1, int x2, int y2, String text) {
     super(x1, y1, x2, y2, text);

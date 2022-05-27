@@ -1,19 +1,25 @@
 //Superscript
 //Subscript
 BufferedReader reader;
+Table species;
+
 DragAndDrop b = new DragAndDrop(100, 100, 200, 200, "Na");
 ArrayList<DragAndDrop> Buttons = new ArrayList<DragAndDrop>();
 ArrayList<Specie> Species = new ArrayList<Specie>();
 public void setup() {
-  size(600, 400);
+  size(1920, 1000);
   getElements();
   reader();
-  createFont("arial-unicode-ms.ttf", 16);
+  displayElements();
+
+  createFont("arial-unicode-ms.ttf", 12);
 }
 public void draw() {
   background(255);
   b.show();
   b.drag();
+  println(Buttons.size());
+
   for (int i = 0; i < Buttons.size(); i++) {
     Buttons.get(i).show();
   }
@@ -36,9 +42,7 @@ public void mouseDragged() {
 }
 
 public void reader() {
-  Table species;
   species = loadTable("Chemicals.tsv", "tsv");
-
   for (int i = 0; i < species.getRowCount(); i++) {
     String formula = species.getString(i, 0);
     String name = species.getString(i, 1);
@@ -50,9 +54,18 @@ public void reader() {
     PFont font = createFont("Arial Unicode MS", 24);
     textFont(font);
     Species.add(new Specie(formula, name, name2, state, h, s, g));
-    Buttons.add(new DragAndDrop((int)random(100, 200), (int)random(100, 200), (int)random(300, 400), (int)random(300, 400), Species.get(i).names[0]));
+    //Buttons.add(new DragAndDrop((int)random(100, 200), (int)random(100, 200), (int)random(300, 400), (int)random(300, 400), Species.get(i).names[0]));
   }
 }
+
+public void displayElements() {
+  int number = 24;
+  for (int i = 0; i < number; i++) {
+    Buttons.add(new DragAndDrop(width-200, height/(number)*i, width, height/(number)+height/(number)*i, "apple"));
+    rect(800, 200*i, 100, 100);
+  }
+}
+
 
 public ArrayList getElements() {
   Table elements;
