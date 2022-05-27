@@ -1,48 +1,37 @@
 //Superscript
 //Subscript
-BufferedReader reader;
 Table species;
-
-DragAndDrop b = new DragAndDrop(100, 100, 200, 200, "Na");
-ArrayList<DragAndDrop> Buttons = new ArrayList<DragAndDrop>();
+ArrayList<ChemButton> Buttons = new ArrayList<ChemButton>();
 ArrayList<Specie> Species = new ArrayList<Specie>();
-public void setup() {
-  size(1920, 1000);
-  getElements();
-  reader();
-  displayElements();
+Display display = new Display();
+int maxOnScreen = 24, panelWidth = 300, scrollWidth = 100;
+int finalPanelWidth = panelWidth + scrollWidth;
 
+
+//ScrollWheel s = new ScrollWheel(400, 200, 100, 100, "");
+
+public void setup() {
+  size(1000, 800);
+  getElements();
+  spawnSpecies();
   createFont("arial-unicode-ms.ttf", 12);
 }
+Button nextPage = new Button(panelWidth, 400, scrollWidth, 400, "Scroll Down");
+Button prevPage = new Button(panelWidth, 0, scrollWidth, 400, "Scroll Up");
 public void draw() {
   background(255);
-  b.show();
-  b.drag();
-  println(Buttons.size());
+  scroll();
+  prevPage.click();
+  nextPage.click();
+  showLeftPanel();
 
-  for (int i = 0; i < Buttons.size(); i++) {
-    Buttons.get(i).show();
-  }
-  //System.out.println(b.click());
+  nextPage.show();
+  prevPage.show();
 }
 
-public void mousePressed() {
-  b.setOffset();
-  for (int i = 0; i < Buttons.size(); i++) {
-    Buttons.get(i).setOffset();
-  }
-}
-public void mouseDragged() {
-  b.click();
-  b.drag();
-  for (int i = 0; i < Buttons.size(); i++) {
-    Buttons.get(i).click();
-    Buttons.get(i).drag();
-  }
-}
-
-public void reader() {
+public void spawnSpecies() {
   species = loadTable("Chemicals.tsv", "tsv");
+  fill(255, 0, 0);
   for (int i = 0; i < species.getRowCount(); i++) {
     String formula = species.getString(i, 0);
     String name = species.getString(i, 1);
@@ -54,18 +43,22 @@ public void reader() {
     PFont font = createFont("Arial Unicode MS", 24);
     textFont(font);
     Species.add(new Specie(formula, name, name2, state, h, s, g));
-    //Buttons.add(new DragAndDrop((int)random(100, 200), (int)random(100, 200), (int)random(300, 400), (int)random(300, 400), Species.get(i).names[0]));
+    Buttons.add(new ChemButton(0, i * height/( maxOnScreen), panelWidth, height/maxOnScreen+1, Species.get(i)));
   }
 }
 
-public void displayElements() {
-  int number = 24;
-  for (int i = 0; i < number; i++) {
-    Buttons.add(new DragAndDrop(width-200, height/(number)*i, width, height/(number)+height/(number)*i, "apple"));
-    rect(800, 200*i, 100, 100);
+public void showLeftPanel() {
+  for (int i = 1; i < Species.size(); i++) {
+    Buttons.get(i).show();
+    Buttons.get(i).click();
+    Buttons.get(i).displayName();
   }
+  fill(255);
+  rect(0, 0, panelWidth, height/maxOnScreen);
+  fill(0);
+  textSize(16);
+  text("Chemicals", panelWidth/8, 10);
 }
-
 
 public ArrayList getElements() {
   Table elements;
@@ -76,3 +69,35 @@ public ArrayList getElements() {
   }
   return Elements;
 }
+
+public void scroll() {
+  if (Buttons.get(Buttons.size()-1).getY() >= height) {
+    if (nextPage.click()) {
+      for (int i = 1; i < Species.size(); i++) {
+        Buttons.get(i).scrollDown();
+      }
+    }
+  }
+  println(Buttons.get(1).getY());
+  println(height/maxOnScreen);
+  if (Buttons.get(1).getY() <= height/maxOnScreen-10) {
+    if (prevPage.click()) {
+      for (int i = 1; i < Species.size(); i++) {
+        Buttons.get(i).scrollUp();
+      }
+    }
+  }
+}
+
+
+
+/*
+public void mousePressed() {
+ s.setOffset();
+ }
+ 
+ public void mouseDragged() {
+ s.click();
+ s.drag();
+ }
+ */

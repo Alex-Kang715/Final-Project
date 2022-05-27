@@ -1,29 +1,33 @@
 public class Button {
-  private int x1, x2, y1, y2;
+  private double x, y, sizeX, sizeY;
   private color c = color(255, 255, 255);
   private String text;
 
-  public Button(int x1, int y1, int x2, int y2, String text) {
-    this.x1 = x1;
-    this.x2 = x2;
-    this.y1 = y1;
-    this.y2 = y2;
+  public Button(double x, double y, double sizeX, double sizeY, String text) {
+    this.x = x;
+    this.y = y;
+    this.sizeX = sizeX;
+    this.sizeY = sizeY;
     this.text = text;
   }
   public void show() {
-    rectMode(CORNERS);
     fill(c);
-    rect(x1, y1, x2, y2);
-    textAlign(CENTER);
+    rect((float)x, (float) y, (float)sizeX, (float)sizeY);
+    textAlign(LEFT, CENTER);
     fill(0);
-    textSize(26);
-    text(text, ((x1+x2)/2), ((y1+y2)/2));
+    textSize(16);
+    text(text, (float)((x+sizeX)/8 + (7*x/8)), (float) (y+sizeY/2));
   }
   public boolean click() {
     boolean clicked = false;
-    if (mouseX > x1 && mouseX < x2 && mouseY > y1 && mouseY < y2 && mousePressed) {
+    if (mouseX > x && mouseX < x+sizeX && mouseY > y && mouseY < y+sizeY && mousePressed) {
+      c = color(200);
       return true;
     }
+    c = color(255);
     return clicked;
+  }
+  public double getY(){
+    return y;
   }
 }

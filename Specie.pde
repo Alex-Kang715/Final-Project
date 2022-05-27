@@ -13,15 +13,17 @@ public class Specie {
     this.entropy = s;
     this.gibbs = g;
   }
-  public double getGibbs(){
+  public double getGibbs() {
     return gibbs;
   }
 
-  public void getComponentElements() {
-    String substring = this.names[0].substring(0, 1);
-  }
-
-  public void getMolarMass() {
-    String substring = this.names[0].substring(0, 1);
-  }
+  /*
+   public void getComponentElements() {
+   String substring = this.names[0].substring(0, 1);
+   }
+   
+   public void getMolarMass() {
+   String substring = this.names[0].substring(0, 1);
+   }
+   */
 }
